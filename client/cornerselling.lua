@@ -28,6 +28,7 @@ end
 local function PoliceCall()
     if Config.PoliceCallChance <= math.random(1, 100) then
         TriggerServerEvent('police:server:policeAlert', 'Drug sale in progress')
+        exports['ps-dispatch']:DrugSale()
     end
 end
 
@@ -224,6 +225,8 @@ local function SellToPed(ped)
                                         lastPed[#lastPed + 1] = entity
                                         exports['qb-target']:RemoveZone('sellingPed')
                                         PoliceCall()
+                                        exports['ps-dispatch']:DrugSale()
+
                                     end,
                                 },
                                 {
@@ -303,6 +306,7 @@ local function ToggleSelling()
         cornerselling = true
         LocalPlayer.state:set("inv_busy", true, true)
         QBCore.Functions.Notify(Lang:t("info.started_selling_drugs"))
+        
         local startLocation = GetEntityCoords(PlayerPedId())
         CreateThread(function()
             while cornerselling do
